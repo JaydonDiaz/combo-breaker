@@ -6,7 +6,7 @@ import {
   Target, Zap, Flame, Shield, Trophy, Package,
   ChevronRight, Menu, X, Upload, CheckCircle,
   Star, Award, Truck, RotateCcw, HeadphonesIcon,
-  ArrowRight, Play
+  ArrowRight, Play, LayoutGrid
 } from 'lucide-react'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -43,7 +43,7 @@ const PROTOCOL_STEPS = [
     step: '01',
     title: 'Choose Your Discipline',
     desc: 'From first-timer to seasoned competitor — filter by sport, skill level, and weight class to find gear built for your fight.',
-    img: 'https://images.unsplash.com/photo-1509563268879-5c990cda3b35?auto=format&fit=crop&w=1200&q=80',
+    img: 'https://images.unsplash.com/photo-1762336219284-a0a5488342a0?auto=format&fit=crop&w=1200&q=80',
   },
   {
     step: '02',
@@ -67,7 +67,7 @@ const TRUST_SIGNALS = [
 
 const STRIKE_NAMES = ['JAB', 'CROSS', 'HOOK', 'UPPERCUT', 'BODY SHOT', 'SPINNING BACK FIST', 'TEEP']
 
-// ─── FightStriker Signature Animation ────────────────────────────────────────
+// ─── FightStriker (unused — kept for reference) ───────────────────────────────
 
 function FightStriker() {
   const [activeStrike, setActiveStrike] = useState(0)
@@ -217,80 +217,77 @@ function FightStriker() {
 
 // ─── ProductShuffler ──────────────────────────────────────────────────────────
 
-function ProductShuffler() {
-  const [activeIdx, setActiveIdx] = useState(0)
+const FAN_ROTATIONS = [-25, -15, -5, 5, 15, 25]
 
-  useEffect(() => {
-    const t = setInterval(() => setActiveIdx(p => (p + 1) % PRODUCTS.length), 3000)
-    return () => clearInterval(t)
-  }, [])
+function ProductShuffler() {
+  const [hoveredIdx, setHoveredIdx] = useState(null)
 
   return (
-    <div className="relative w-full h-full flex items-center justify-center bg-[#0A0A0A] rounded-2xl overflow-hidden p-6">
+    <div className="relative w-full h-full flex flex-col bg-[#0A0A0A] rounded-2xl overflow-hidden">
       <div className="absolute inset-0 opacity-10 grid-bg" />
-      <div className="relative w-full max-w-xs">
-        {PRODUCTS.map((p, i) => {
-          const offset = (i - activeIdx + PRODUCTS.length) % PRODUCTS.length
-          const zIndex = PRODUCTS.length - offset
-          const isTop = offset === 0
-          const isSecond = offset === 1
-          const isThird = offset === 2
-          const Icon = p.icon
 
-          return (
-            <div key={p.name}
-              className="absolute inset-0 flex flex-col gap-3 p-5 rounded-xl border transition-all duration-700"
-              style={{
-                transform: isTop ? 'scale(1) translateY(0)' : isSecond ? 'scale(0.95) translateY(12px)' : 'scale(0.90) translateY(24px)',
-                opacity: isTop ? 1 : isSecond ? 0.6 : isThird ? 0.3 : 0,
-                zIndex,
-                background: isTop ? 'rgba(196,30,58,0.08)' : 'rgba(20,20,20,0.9)',
-                borderColor: isTop ? 'rgba(196,30,58,0.4)' : 'rgba(255,255,255,0.06)',
-                filter: isTop ? 'none' : `blur(${offset * 1.5}px)`,
-                pointerEvents: isTop ? 'auto' : 'none',
-              }}
-            >
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg flex items-center justify-center"
+      {/* Header */}
+      <div className="relative z-10 p-7 pb-2 text-center">
+        <div className="w-10 h-10 rounded-xl mb-4 flex items-center justify-center mx-auto"
+          style={{ background: 'rgba(196,30,58,0.15)' }}>
+          <LayoutGrid size={20} color="#C41E3A" />
+        </div>
+        <p className="font-mono text-[10px] tracking-[0.2em] text-[#D4AF37] uppercase mb-2">Our Categories</p>
+        <h3 className="font-display text-white font-bold text-2xl">Built for every discipline</h3>
+      </div>
+
+      {/* Fan */}
+      <div className="relative flex-1 flex items-center justify-center pb-4">
+        <div className="relative" style={{ width: '280px', height: '290px' }}>
+          {PRODUCTS.map((p, i) => {
+            const isHovered = hoveredIdx === i
+            const Icon = p.icon
+            const rotation = FAN_ROTATIONS[i]
+
+            return (
+              <div
+                key={p.name}
+                onMouseEnter={() => setHoveredIdx(i)}
+                onMouseLeave={() => setHoveredIdx(null)}
+                className="absolute cursor-pointer rounded-xl border flex flex-col gap-3 p-5 transition-all duration-300 ease-out"
+                style={{
+                  width: '180px',
+                  height: '280px',
+                  left: '50%',
+                  bottom: '0',
+                  marginLeft: '-90px',
+                  transformOrigin: 'bottom center',
+                  transform: isHovered
+                    ? `rotate(${rotation}deg) translateY(-40px) scale(1.05)`
+                    : `rotate(${rotation}deg)`,
+                  zIndex: isHovered ? 20 : i + 1,
+                  background: isHovered ? 'rgba(35,8,14,0.97)' : 'rgba(15,15,15,0.95)',
+                  borderColor: isHovered ? 'rgba(196,30,58,0.5)' : 'rgba(255,255,255,0.1)',
+                  boxShadow: isHovered
+                    ? '0 20px 40px rgba(196,30,58,0.25), 0 0 0 1px rgba(196,30,58,0.2)'
+                    : '0 4px 20px rgba(0,0,0,0.6)',
+                }}
+              >
+                <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0"
                   style={{ background: 'rgba(196,30,58,0.15)' }}>
                   <Icon size={20} color="#C41E3A" />
                 </div>
-                <span className="font-mono text-[10px] tracking-[0.2em] text-[#D4AF37] uppercase">{p.tag}</span>
+                <span className="font-mono text-[9px] tracking-[0.15em] text-[#D4AF37] uppercase leading-none">{p.tag}</span>
+                <h3 className="font-display text-white font-bold text-base leading-tight">{p.name}</h3>
+                <p className="text-gray-400 text-xs leading-relaxed line-clamp-4">{p.desc}</p>
+                {isHovered && (
+                  <button className="mt-auto flex items-center gap-1 text-[#C41E3A] text-xs font-semibold hover:text-[#D4AF37] transition-colors">
+                    Shop Now <ArrowRight size={12} />
+                  </button>
+                )}
               </div>
-              <h3 className="font-display text-white font-bold text-lg leading-tight">{p.name}</h3>
-              <p className="text-gray-400 text-sm leading-relaxed">{p.desc}</p>
-              <button className="mt-auto flex items-center gap-2 text-[#C41E3A] text-sm font-semibold hover:text-[#D4AF37] transition-colors">
-                Shop Now <ArrowRight size={14} />
-              </button>
-            </div>
-          )
-        })}
-
-        {/* Spacer so container has height */}
-        <div className="invisible p-5 rounded-xl flex flex-col gap-3">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg" />
-            <span className="text-[10px]">tag</span>
-          </div>
-          <h3 className="font-display text-lg">placeholder</h3>
-          <p className="text-sm">desc</p>
-          <button className="mt-auto text-sm">shop</button>
+            )
+          })}
         </div>
       </div>
 
-      {/* Dot indicators */}
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5">
-        {PRODUCTS.map((_, i) => (
-          <div key={i}
-            className="rounded-full transition-all duration-500"
-            style={{
-              width: i === activeIdx ? '20px' : '6px',
-              height: '6px',
-              background: i === activeIdx ? '#C41E3A' : 'rgba(255,255,255,0.2)',
-            }}
-          />
-        ))}
-      </div>
+      {/* Hint */}
+      <p className="relative z-10 pb-4 text-center font-mono text-[9px] tracking-[0.2em] text-gray-600 uppercase">Hover to explore</p>
     </div>
   )
 }
@@ -648,19 +645,14 @@ export default function App() {
             <p className="mt-4 text-gray-400 max-w-xl mx-auto leading-relaxed">Every product designed with active fighters. Every material tested in training. Zero compromises.</p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 items-start">
             {/* Card 1 — Product Shuffler */}
-            <div className="fade-up lg:col-span-1 rounded-2xl overflow-hidden" style={{ height: '420px' }}>
+            <div className="fade-up lg:col-span-2 rounded-2xl overflow-hidden" style={{ height: '480px' }}>
               <ProductShuffler />
             </div>
 
-            {/* Card 2 — FightStriker signature animation */}
-            <div className="fade-up rounded-2xl overflow-hidden" style={{ height: '420px' }}>
-              <FightStriker />
-            </div>
-
-            {/* Card 3 — Free shipping calculator */}
-            <div className="fade-up rounded-2xl bg-[#0F0F0F] border border-white/8 p-7 flex flex-col justify-between" style={{ height: '420px' }}>
+            {/* Card 2 — Free shipping calculator */}
+            <div className="fade-up rounded-2xl bg-[#0F0F0F] border border-white/8 p-7 flex flex-col justify-between" style={{ minHeight: '340px' }}>
               <div>
                 <div className="w-10 h-10 rounded-xl mb-4 flex items-center justify-center"
                   style={{ background: 'rgba(212,175,55,0.15)' }}>
@@ -686,7 +678,7 @@ export default function App() {
               </div>
 
               <button onClick={() => document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })}
-                className="w-full py-3 rounded-xl font-display font-bold text-sm transition-all"
+                className="w-full py-3 rounded-xl font-display font-bold text-sm transition-all mt-4"
                 style={{ background: 'rgba(196,30,58,0.15)', color: '#C41E3A', border: '1px solid rgba(196,30,58,0.3)' }}>
                 Questions? Contact Us
               </button>

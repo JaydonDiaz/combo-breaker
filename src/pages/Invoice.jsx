@@ -94,7 +94,7 @@ function SectionHeader({ n, label }) {
   )
 }
 
-function SuccessScreen({ invoiceNumber, clientName, total, onReset, onPrint }) {
+function SuccessScreen({ invoiceNumber, clientEmail, total, onReset }) {
   return (
     <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-6">
       <div className="w-16 h-16 rounded-full flex items-center justify-center mb-5"
@@ -103,24 +103,17 @@ function SuccessScreen({ invoiceNumber, clientName, total, onReset, onPrint }) {
           <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
         </svg>
       </div>
-      <h2 className="text-2xl font-bold text-white mb-2" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>Invoice Ready</h2>
+      <h2 className="text-2xl font-bold text-white mb-2" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>Invoice Sent!</h2>
       <p className="text-gray-400 text-sm mb-1">
-        Invoice <span className="font-semibold text-white font-mono">{invoiceNumber}</span> for
+        Invoice <span className="font-semibold text-white font-mono">{invoiceNumber}</span> was emailed to
       </p>
-      <p className="font-semibold mb-1" style={{ color: '#D4AF37' }}>{clientName}</p>
+      <p className="font-semibold mb-1" style={{ color: '#D4AF37' }}>{clientEmail}</p>
       <p className="text-gray-500 text-xs mb-8">Total: <span className="text-white font-semibold">{formatCurrency(total)}</span></p>
       <div className="flex gap-3 flex-wrap justify-center">
-        <button onClick={onPrint}
-          className="flex items-center gap-2 px-6 py-3 rounded-xl text-white font-semibold text-sm transition-all"
-          style={{ background: 'linear-gradient(135deg, #C41E3A, #9B1726)' }}>
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
-          </svg>
-          Print / Save PDF
-        </button>
         <button onClick={onReset}
-          className="px-6 py-3 rounded-xl border border-white/10 text-gray-300 hover:text-white hover:border-white/30 font-semibold text-sm transition-colors">
-          New Invoice
+          className="px-6 py-3 rounded-xl text-white font-semibold text-sm transition-all"
+          style={{ background: 'linear-gradient(135deg, #C41E3A, #9B1726)' }}>
+          Send Another Invoice
         </button>
       </div>
     </div>
@@ -225,6 +218,7 @@ export default function Invoice() {
   const [taxRate,       setTaxRate]       = useState(0)
   const [notes,         setNotes]         = useState('Payment due within 30 days. Thank you for choosing Combo Breaker.')
   const [status,        setStatus]        = useState('idle')
+  const [errorMsg,      setErrorMsg]      = useState('')
   const [submitted,     setSubmitted]     = useState(null)
 
   const updateItem = useCallback((idx, field, value) => {
@@ -235,11 +229,25 @@ export default function Invoice() {
 
   const { subtotal, taxAmount, total } = computeTotals(items, taxRate)
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault()
+    setStatus('sending')
+    setErrorMsg('')
     const data = { clientName, clientEmail, clientAddress, invoiceNumber, invoiceDate, dueDate, items, taxRate, notes, subtotal, taxAmount, total }
-    setSubmitted(data)
-    setStatus('done')
+    try {
+      const res = await fetch('/api/invoice', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      })
+      const json = await res.json()
+      if (!res.ok || !json.success) throw new Error(json.error || 'Unknown error')
+      setSubmitted(data)
+      setStatus('done')
+    } catch (err) {
+      setErrorMsg(String(err))
+      setStatus('error')
+    }
   }
 
   const reset = () => {
@@ -248,7 +256,7 @@ export default function Invoice() {
     setInvoiceDate(TODAY); setDueDate(IN_30)
     setItems([{ ...BLANK_ITEM }]); setTaxRate(0)
     setNotes('Payment due within 30 days. Thank you for choosing Combo Breaker.')
-    setStatus('idle'); setSubmitted(null)
+    setStatus('idle'); setErrorMsg(''); setSubmitted(null)
   }
 
   return (
@@ -279,10 +287,9 @@ export default function Invoice() {
         {status === 'done' && submitted ? (
           <SuccessScreen
             invoiceNumber={submitted.invoiceNumber}
-            clientName={submitted.clientName}
+            clientEmail={submitted.clientEmail}
             total={submitted.total}
             onReset={reset}
-            onPrint={() => window.print()}
           />
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -430,16 +437,32 @@ export default function Invoice() {
               Total <span className="font-semibold" style={{ color: '#D4AF37' }}>{formatCurrency(total)}</span>
             </div>
 
+            {/* Error banner */}
+            {status === 'error' && (
+              <div className="rounded-xl px-4 py-3 text-sm" style={{ background: 'rgba(196,30,58,0.1)', border: '1px solid rgba(196,30,58,0.3)', color: '#F87171' }}>
+                <strong>Error:</strong> {errorMsg}
+              </div>
+            )}
+
             {/* Submit */}
             <div className="flex items-center justify-between pt-2 pb-10">
-              <span className="text-xs text-gray-600">Invoice will be ready to print or save as PDF</span>
-              <button type="submit"
-                className="flex items-center gap-2 px-6 py-3 rounded-xl text-white font-bold text-sm transition-all"
+              <span className="text-xs text-gray-600">PDF will be attached and emailed via Composio</span>
+              <button type="submit" disabled={status === 'sending'}
+                className="flex items-center gap-2 px-6 py-3 rounded-xl text-white font-bold text-sm transition-all disabled:opacity-60"
                 style={{ background: 'linear-gradient(135deg, #C41E3A, #9B1726)' }}>
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-                Generate Invoice
+                {status === 'sending' ? (
+                  <>
+                    <span className="w-4 h-4 rounded-full border-2 border-white border-t-transparent animate-spin" />
+                    Generating &amp; Sending…
+                  </>
+                ) : (
+                  <>
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                    Generate PDF &amp; Send Invoice
+                  </>
+                )}
               </button>
             </div>
 
