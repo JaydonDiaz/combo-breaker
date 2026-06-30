@@ -12,7 +12,7 @@ export default defineConfig({
     default: { maxAttempts: 2, minTimeoutInMs: 2000, maxTimeoutInMs: 10000, factor: 2 },
   },
   build: {
-    external: ["@react-pdf/renderer", "@composio/core"],
+    external: ["@react-pdf/renderer", "@composio/core", "react", "react-dom"],
     autoDetectExternal: true,
   },
 });
