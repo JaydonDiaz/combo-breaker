@@ -434,6 +434,7 @@ export default function App() {
   const heroContentRef = useRef(null)
   const pillarsRef = useRef(null)
   const protocolRef = useRef(null)
+  const progressBarRef = useRef(null)
 
   // Scroll detection
   useEffect(() => {
@@ -446,6 +447,67 @@ export default function App() {
   useEffect(() => {
     const t = setInterval(() => setActiveImg(p => (p + 1) % HERO_IMAGES.length), 5000)
     return () => clearInterval(t)
+  }, [])
+
+  // Scroll progress bar
+  useEffect(() => {
+    const bar = progressBarRef.current
+    if (!bar) return
+    const onScroll = () => {
+      const total = document.documentElement.scrollHeight - window.innerHeight
+      gsap.set(bar, { scaleX: total > 0 ? window.scrollY / total : 0 })
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  // Hero parallax — background images scroll at 40% speed
+  useEffect(() => {
+    if (!heroRef.current) return
+    const ctx = gsap.context(() => {
+      gsap.to('.hero-bg-img', {
+        yPercent: -12,
+        ease: 'none',
+        scrollTrigger: { trigger: heroRef.current, start: 'top top', end: 'bottom top', scrub: true },
+      })
+    }, heroRef)
+    return () => ctx.revert()
+  }, [])
+
+  // Staggered grid reveals
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.utils.toArray('.stagger-grid').forEach(grid => {
+        gsap.fromTo(Array.from(grid.children),
+          { opacity: 0, y: 28 },
+          { opacity: 1, y: 0, duration: 0.65, ease: 'power2.out', stagger: 0.12,
+            scrollTrigger: { trigger: grid, start: 'top 80%' } }
+        )
+      })
+      gsap.utils.toArray('.stagger-grid-fade').forEach(grid => {
+        gsap.fromTo(Array.from(grid.children),
+          { opacity: 0 },
+          { opacity: 1, duration: 0.5, ease: 'power1.out', stagger: 0.08,
+            scrollTrigger: { trigger: grid, start: 'top 82%' } }
+        )
+      })
+    })
+    return () => ctx.revert()
+  }, [])
+
+  // Protocol image parallax
+  useEffect(() => {
+    if (!protocolRef.current) return
+    const ctx = gsap.context(() => {
+      gsap.utils.toArray('.protocol-img').forEach(img => {
+        gsap.fromTo(img,
+          { yPercent: -6, scale: 1.12 },
+          { yPercent: 6, scale: 1.12, ease: 'none',
+            scrollTrigger: { trigger: img.closest('.protocol-card'), start: 'top bottom', end: 'bottom top', scrub: true } }
+        )
+      })
+    }, protocolRef)
+    return () => ctx.revert()
   }, [])
 
   // GSAP hero entrance
@@ -501,6 +563,10 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[#F8F8F8] font-body overflow-x-hidden">
+
+      {/* Scroll progress bar */}
+      <div ref={progressBarRef} className="fixed top-0 left-0 right-0 z-[200] h-[2px] origin-left"
+        style={{ background: 'linear-gradient(to right, #C41E3A, #D4AF37)', transform: 'scaleX(0)' }} />
 
       {/* ── Navbar ─────────────────────────────────────────────────────────── */}
       <header className="fixed top-0 left-0 right-0 z-50 flex justify-center px-4 pt-4">
@@ -568,11 +634,13 @@ export default function App() {
         {/* Background images — crossfade */}
         {HERO_IMAGES.map((src, i) => (
           <img key={src} src={src} alt=""
-            className="absolute inset-0 w-full h-full object-cover"
+            className="hero-bg-img absolute inset-0 w-full h-full object-cover"
             style={{
               opacity: i === activeImg ? 1 : 0,
               transition: 'opacity 1.4s ease-in-out',
               zIndex: 0,
+              scale: 1.15,
+              transformOrigin: 'center center',
             }}
           />
         ))}
@@ -697,13 +765,13 @@ export default function App() {
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 stagger-grid">
             {[
               { stat: 12000, suffix: '+', label: 'Active Fighters Equipped', sub: 'Across 40+ countries worldwide' },
               { stat: 98, suffix: '%', label: 'Satisfaction Rate', sub: 'Based on verified purchase reviews' },
               { stat: 50000, suffix: '+', label: 'Orders Delivered', sub: 'Since 2019, zero inventory delays' },
             ].map((item, i) => (
-              <div key={i} className="fade-up text-center p-10 rounded-3xl bg-white shadow-sm border border-[#E5E5E5] hover:shadow-md transition-shadow">
+              <div key={i} className="text-center p-10 rounded-3xl bg-white shadow-sm border border-[#E5E5E5] hover:shadow-md transition-shadow">
                 <div className="font-display font-black text-[#C41E3A] mb-2"
                   style={{ fontSize: 'clamp(2.8rem, 6vw, 4.5rem)', lineHeight: 1 }}>
                   <CountUp target={item.stat} suffix={item.suffix} />
@@ -742,7 +810,7 @@ export default function App() {
                 </div>
                 <div className="relative h-64 md:h-auto overflow-hidden">
                   <img src={step.img} alt={step.title}
-                    className="w-full h-full object-cover"
+                    className="protocol-img w-full h-full object-cover"
                     style={{ filter: 'brightness(0.8) contrast(1.1)' }} />
                   <div className="absolute inset-0"
                     style={{ background: 'linear-gradient(to right, rgba(10,10,10,0.4), transparent)' }} />
@@ -764,12 +832,12 @@ export default function App() {
             <p className="mt-4 text-gray-400 max-w-xl mx-auto leading-relaxed">Every discipline. Every skill level. Gear engineered for the way you fight.</p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-white/8 rounded-2xl overflow-hidden">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-white/8 rounded-2xl overflow-hidden stagger-grid-fade">
             {PRODUCTS.map((product, i) => {
               const Icon = product.icon
               return (
                 <div key={product.name}
-                  className="group relative bg-[#0A0A0A] p-8 cursor-pointer transition-all duration-300 hover:bg-[#141414] fade-up">
+                  className="group relative bg-[#0A0A0A] p-8 cursor-pointer transition-all duration-300 hover:bg-[#141414]">
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                     style={{ background: 'linear-gradient(135deg, rgba(196,30,58,0.06), transparent)' }} />
                   <div className="relative z-10">
@@ -801,11 +869,11 @@ export default function App() {
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 stagger-grid">
             {TRUST_SIGNALS.map((t, i) => {
               const Icon = t.icon
               return (
-                <div key={t.title} className="fade-up p-8 rounded-3xl bg-white border border-[#E5E5E5] hover:shadow-lg transition-shadow">
+                <div key={t.title} className="p-8 rounded-3xl bg-white border border-[#E5E5E5] hover:shadow-lg transition-shadow">
                   <div className="w-12 h-12 rounded-2xl mb-5 flex items-center justify-center"
                     style={{ background: 'rgba(196,30,58,0.08)', border: '1px solid rgba(196,30,58,0.15)' }}>
                     <Icon size={22} color="#C41E3A" />
