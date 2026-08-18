@@ -6,9 +6,10 @@
   --PRIMARY_RGB: 196, 30, 58;
 
   /* Theme tokens for content sections (default = dark).
-     Hero, nav, footer, and the ProductShuffler card stay pinned to
-     their own hardcoded dark colors regardless of theme — brand chrome,
-     not page canvas. */
+     Hero, footer, and the ProductShuffler card stay pinned to their own
+     hardcoded dark colors regardless of theme — brand chrome, not page
+     canvas. The nav pill DOES react (see --cb-nav-*) so the toggle is
+     visible no matter where you've scrolled. */
   --cb-bg: #0A0A0A;
   --cb-card: #0F0F0F;
   --cb-card-hover: #141414;
@@ -23,6 +24,8 @@
   --cb-muted-4: #8B8F98;
   --cb-input-bg: rgba(255,255,255,0.05);
   --cb-shadow: rgba(0,0,0,0.4);
+  --cb-nav-bg-rgb: 10,10,10;
+  --cb-nav-border: rgba(255,255,255,0.08);
 }
 
 html[data-theme="light"] {
@@ -40,6 +43,8 @@ html[data-theme="light"] {
   --cb-muted-4: #56565E;
   --cb-input-bg: rgba(10,10,10,0.035);
   --cb-shadow: rgba(10,10,10,0.08);
+  --cb-nav-bg-rgb: 255,255,255;
+  --cb-nav-border: rgba(10,10,10,0.1);
 }
 
 @layer base {
