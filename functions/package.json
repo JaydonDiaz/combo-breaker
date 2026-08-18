@@ -1,0 +1,10 @@
+{
+  "name": "functions",
+  "type": "module",
+  "engines": { "node": "20" },
+  "main": "index.js",
+  "dependencies": {
+    "firebase-functions": "^6.0.0",
+    "@trigger.dev/sdk": "^4.4.6"
+  }
+}
