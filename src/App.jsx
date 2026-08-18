@@ -588,7 +588,7 @@ export default function App() {
       <header className="fixed top-0 left-0 right-0 z-50 flex justify-center px-4 pt-4">
         <nav className="w-full max-w-6xl px-6 py-3 rounded-2xl flex items-center justify-between transition-all duration-500"
           style={{
-            background: scrolled ? 'rgba(var(--cb-nav-bg-rgb), 0.85)' : 'rgba(var(--cb-nav-bg-rgb), 0.5)',
+            background: scrolled ? 'rgba(var(--cb-nav-bg-rgb), 0.85)' : 'rgba(var(--cb-nav-bg-rgb), 0.18)',
             backdropFilter: 'blur(16px)',
             border: scrolled ? '1px solid rgba(196,30,58,0.25)' : '1px solid var(--cb-nav-border)',
           }}>
@@ -598,14 +598,14 @@ export default function App() {
               style={{ background: 'linear-gradient(135deg, #C41E3A, #9B1726)' }}>
               <Zap size={16} color="white" />
             </div>
-            <span className="font-display font-bold text-[var(--cb-text)] text-lg tracking-tight">Combo Breaker</span>
+            <span className={`font-display font-bold text-lg tracking-tight ${scrolled ? 'text-[var(--cb-text)]' : 'text-white'}`}>Combo Breaker</span>
           </div>
 
           {/* Desktop links */}
           <div className="hidden md:flex items-center gap-1">
             {NAV_LINKS.map(l => (
               <button key={l.label} onClick={() => scrollTo(l.href)}
-                className="px-4 py-2 text-sm text-[var(--cb-muted-2)] hover:text-[var(--cb-text)] font-medium rounded-xl hover:bg-[var(--cb-card-2)] transition-all">
+                className={`px-4 py-2 text-sm font-medium rounded-xl hover:bg-[var(--cb-card-2)] transition-all ${scrolled ? 'text-[var(--cb-muted-2)] hover:text-[var(--cb-text)]' : 'text-gray-300 hover:text-white'}`}>
                 {l.label}
               </button>
             ))}
@@ -613,7 +613,7 @@ export default function App() {
 
           <div className="flex items-center gap-3">
             <button onClick={toggleTheme}
-              className="w-9 h-9 rounded-xl flex items-center justify-center text-[var(--cb-text)] border border-[var(--cb-border-2)] hover:border-[#C41E3A] hover:text-[#C41E3A] transition-colors"
+              className={`w-9 h-9 rounded-xl flex items-center justify-center border transition-colors hover:border-[#C41E3A] hover:text-[#C41E3A] ${scrolled ? 'text-[var(--cb-text)] border-[var(--cb-border-2)]' : 'text-white border-white/15'}`}
               aria-label={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}>
               {theme === 'light' ? <Sun size={16} /> : <Moon size={16} />}
             </button>
@@ -623,7 +623,7 @@ export default function App() {
               Get Geared Up <ArrowRight size={14} />
             </button>
             <button onClick={() => setMenuOpen(o => !o)}
-              className="md:hidden p-2 text-[var(--cb-text)]" aria-label="Toggle menu">
+              className={`md:hidden p-2 ${scrolled ? 'text-[var(--cb-text)]' : 'text-white'}`} aria-label="Toggle menu">
               {menuOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
           </div>
