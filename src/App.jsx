@@ -1018,7 +1018,11 @@ export default function App() {
             </div>
           </div>
 
-          <div className="border-t border-white/5 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="border-t border-white/5 pt-8 text-center">
+            <p className="text-gray-600 text-[11px] font-mono">Demo site built for portfolio purposes only — not a real business, and not affiliated with, endorsed by, or operated by any real company.</p>
+          </div>
+
+          <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-gray-600 text-xs font-mono">© {new Date().getFullYear()} Combo Breaker. All rights reserved.</p>
             <div className="flex items-center gap-6">
               <Link to="/privacy" className="text-gray-600 hover:text-gray-300 text-xs font-mono transition-colors">Privacy Policy</Link>
