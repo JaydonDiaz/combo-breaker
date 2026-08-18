@@ -694,12 +694,6 @@ export default function App() {
             ))}
           </div>
         </div>
-
-        {/* Scroll indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 opacity-60">
-          <span className="font-mono text-[10px] tracking-[0.2em] text-white uppercase">Scroll</span>
-          <div className="w-px h-10 bg-gradient-to-b from-white to-transparent" />
-        </div>
       </section>
 
       {/* ── Features ───────────────────────────────────────────────────────── */}
