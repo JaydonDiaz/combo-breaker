@@ -6,7 +6,7 @@ import {
   Target, Zap, Flame, Shield, Trophy, Package,
   ChevronRight, Menu, X, Upload, CheckCircle,
   Star, Award, Truck, RotateCcw, HeadphonesIcon,
-  ArrowRight, Play, LayoutGrid
+  ArrowRight, Play, LayoutGrid, Sun, Moon
 } from 'lucide-react'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -353,8 +353,8 @@ function ContactForm() {
       {status === 'sent' ? (
         <div className="text-center py-16 space-y-4">
           <CheckCircle size={56} className="mx-auto text-[#C41E3A]" style={{ animation: 'count-up-pop 0.5s ease-out' }} />
-          <h3 className="font-display text-2xl font-bold text-white">Message Received</h3>
-          <p className="text-gray-400">Our team will reach out within 24 hours. Stay fight ready.</p>
+          <h3 className="font-display text-2xl font-bold text-[var(--cb-text)]">Message Received</h3>
+          <p className="text-[var(--cb-muted)]">Our team will reach out within 24 hours. Stay fight ready.</p>
           <button onClick={() => { setStatus('idle'); setForm({ name: '', email: '', phone: '', zip: '', message: '' }); setFile(null) }}
             className="mt-4 px-6 py-2 rounded-full border border-[#C41E3A] text-[#C41E3A] text-sm font-semibold hover:bg-[#C41E3A] hover:text-white transition-all">
             Send Another
@@ -365,13 +365,13 @@ function ContactForm() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {[['name', 'Full Name'], ['email', 'Email Address'], ['phone', 'Phone Number'], ['zip', 'ZIP / Postal Code']].map(([k, label]) => (
               <div key={k} className="flex flex-col gap-1.5">
-                <label className="font-mono text-[10px] tracking-[0.2em] text-gray-500 uppercase">{label}</label>
+                <label className="font-mono text-[10px] tracking-[0.2em] text-[var(--cb-muted-3)] uppercase">{label}</label>
                 <input
                   type={k === 'email' ? 'email' : 'text'}
                   required={k === 'name' || k === 'email'}
                   value={form[k]}
                   onChange={e => setForm(f => ({ ...f, [k]: e.target.value }))}
-                  className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-gray-600 focus:outline-none focus:border-[#C41E3A] transition-colors"
+                  className="bg-[var(--cb-input-bg)] border border-[var(--cb-border-2)] rounded-xl px-4 py-3 text-[var(--cb-text)] text-sm placeholder-[var(--cb-muted-4)] focus:outline-none focus:border-[#C41E3A] transition-colors"
                   placeholder={label}
                 />
               </div>
@@ -379,13 +379,13 @@ function ContactForm() {
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <label className="font-mono text-[10px] tracking-[0.2em] text-gray-500 uppercase">Message</label>
+            <label className="font-mono text-[10px] tracking-[0.2em] text-[var(--cb-muted-3)] uppercase">Message</label>
             <textarea
               required
               rows={4}
               value={form.message}
               onChange={e => setForm(f => ({ ...f, message: e.target.value }))}
-              className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-gray-600 focus:outline-none focus:border-[#C41E3A] transition-colors resize-none"
+              className="bg-[var(--cb-input-bg)] border border-[var(--cb-border-2)] rounded-xl px-4 py-3 text-[var(--cb-text)] text-sm placeholder-[var(--cb-muted-4)] focus:outline-none focus:border-[#C41E3A] transition-colors resize-none"
               placeholder="Tell us what you're training for, what gear you need, or any questions…"
             />
           </div>
@@ -396,15 +396,15 @@ function ContactForm() {
             onDragLeave={() => setDragging(false)}
             onDrop={handleDrop}
             className="rounded-xl border-2 border-dashed transition-colors py-6 px-4 text-center cursor-pointer"
-            style={{ borderColor: dragging ? '#C41E3A' : 'rgba(255,255,255,0.1)', background: dragging ? 'rgba(196,30,58,0.05)' : 'transparent' }}
+            style={{ borderColor: dragging ? '#C41E3A' : 'var(--cb-border-2)', background: dragging ? 'rgba(196,30,58,0.05)' : 'transparent' }}
             onClick={() => document.getElementById('file-input').click()}
           >
             <input id="file-input" type="file" className="hidden" onChange={e => setFile(e.target.files[0])} accept=".jpg,.jpeg,.png,.pdf" />
-            <Upload size={20} className="mx-auto mb-2 text-gray-500" />
+            <Upload size={20} className="mx-auto mb-2 text-[var(--cb-muted-3)]" />
             {file ? (
               <p className="text-sm text-[#D4AF37] font-mono">{file.name}</p>
             ) : (
-              <p className="text-sm text-gray-500">Drop a photo or PDF, or <span className="text-[#C41E3A]">browse</span></p>
+              <p className="text-sm text-[var(--cb-muted-3)]">Drop a photo or PDF, or <span className="text-[#C41E3A]">browse</span></p>
             )}
           </div>
 
@@ -430,6 +430,22 @@ export default function App() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [activeImg, setActiveImg] = useState(0)
+  const [theme, setTheme] = useState(() => {
+    const stored = localStorage.getItem('combo-breaker-theme')
+    if (stored === 'light' || stored === 'dark') return stored
+    return window.matchMedia?.('(prefers-color-scheme: light)').matches ? 'light' : 'dark'
+  })
+
+  useEffect(() => {
+    if (theme === 'light') {
+      document.documentElement.setAttribute('data-theme', 'light')
+    } else {
+      document.documentElement.removeAttribute('data-theme')
+    }
+    localStorage.setItem('combo-breaker-theme', theme)
+  }, [theme])
+
+  const toggleTheme = () => setTheme(t => (t === 'light' ? 'dark' : 'light'))
   const heroRef = useRef(null)
   const heroContentRef = useRef(null)
   const pillarsRef = useRef(null)
@@ -562,7 +578,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F8F8F8] font-body overflow-x-hidden">
+    <div className="min-h-screen bg-[var(--cb-bg)] font-body overflow-x-hidden">
 
       {/* Scroll progress bar */}
       <div ref={progressBarRef} className="fixed top-0 left-0 right-0 z-[200] h-[2px] origin-left"
@@ -596,6 +612,11 @@ export default function App() {
           </div>
 
           <div className="flex items-center gap-3">
+            <button onClick={toggleTheme}
+              className="w-9 h-9 rounded-xl flex items-center justify-center text-white border border-white/15 hover:border-[#C41E3A] hover:text-[#C41E3A] transition-colors"
+              aria-label={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}>
+              {theme === 'light' ? <Sun size={16} /> : <Moon size={16} />}
+            </button>
             <button onClick={() => scrollTo('#contact')}
               className="hidden md:flex magnetic-btn items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-bold text-white"
               style={{ background: 'linear-gradient(135deg, #C41E3A, #9B1726)' }}>
@@ -621,8 +642,13 @@ export default function App() {
               </button>
             ))}
           </div>
+          <button onClick={toggleTheme}
+            className="mt-4 w-full py-3 rounded-xl flex items-center justify-center gap-2 text-white text-sm font-semibold border border-white/15">
+            {theme === 'light' ? <Sun size={16} /> : <Moon size={16} />}
+            {theme === 'light' ? 'Light Mode' : 'Dark Mode'}
+          </button>
           <button onClick={() => scrollTo('#contact')}
-            className="mt-auto w-full py-4 rounded-2xl font-display font-bold text-white text-lg"
+            className="mt-3 w-full py-4 rounded-2xl font-display font-bold text-white text-lg"
             style={{ background: 'linear-gradient(135deg, #C41E3A, #9B1726)' }}>
             Get Geared Up
           </button>
@@ -697,14 +723,14 @@ export default function App() {
       </section>
 
       {/* ── Features ───────────────────────────────────────────────────────── */}
-      <section id="features" className="py-24 px-6 bg-[#0A0A0A]">
+      <section id="features" className="py-24 px-6 bg-[var(--cb-bg)]">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16 fade-up">
             <p className="font-mono text-[10px] tracking-[0.3em] text-[#C41E3A] uppercase mb-3">What We Offer</p>
-            <h2 className="font-display font-black text-white" style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)' }}>
+            <h2 className="font-display font-black text-[var(--cb-text)]" style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)' }}>
               Gear Built to <span className="gradient-text">Dominate</span>
             </h2>
-            <p className="mt-4 text-gray-400 max-w-xl mx-auto leading-relaxed">Every product designed with active fighters. Every material tested in training. Zero compromises.</p>
+            <p className="mt-4 text-[var(--cb-muted)] max-w-xl mx-auto leading-relaxed">Every product designed with active fighters. Every material tested in training. Zero compromises.</p>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 items-start">
@@ -714,15 +740,15 @@ export default function App() {
             </div>
 
             {/* Card 2 — Free shipping calculator */}
-            <div className="fade-up rounded-2xl bg-[#0F0F0F] border border-white/8 p-7 flex flex-col justify-between" style={{ minHeight: '340px' }}>
+            <div className="fade-up rounded-2xl bg-[var(--cb-card)] border border-[var(--cb-border)] p-7 flex flex-col justify-between" style={{ minHeight: '340px' }}>
               <div>
                 <div className="w-10 h-10 rounded-xl mb-4 flex items-center justify-center"
                   style={{ background: 'rgba(212,175,55,0.15)' }}>
                   <Truck size={20} color="#D4AF37" />
                 </div>
                 <p className="font-mono text-[10px] tracking-[0.2em] text-[#D4AF37] uppercase mb-2">Free Shipping</p>
-                <h3 className="font-display text-white font-bold text-2xl mb-3">Zero friction to your door</h3>
-                <p className="text-gray-400 text-sm leading-relaxed">Every order over $75 ships free. Under $75? Flat $7.99. Track your gear from warehouse to gym.</p>
+                <h3 className="font-display text-[var(--cb-text)] font-bold text-2xl mb-3">Zero friction to your door</h3>
+                <p className="text-[var(--cb-muted)] text-sm leading-relaxed">Every order over $75 ships free. Under $75? Flat $7.99. Track your gear from warehouse to gym.</p>
               </div>
 
               <div className="space-y-3">
@@ -732,8 +758,8 @@ export default function App() {
                   { label: 'Fight Day Rush', price: '$24.99' },
                 ].map(opt => (
                   <div key={opt.label} className="flex items-center justify-between py-3 px-4 rounded-xl"
-                    style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)' }}>
-                    <span className="text-gray-300 text-sm">{opt.label}</span>
+                    style={{ background: 'var(--cb-card-2)', border: '1px solid var(--cb-border)' }}>
+                    <span className="text-[var(--cb-muted-2)] text-sm">{opt.label}</span>
                     <span className="font-mono text-[#D4AF37] text-sm font-semibold">{opt.price}</span>
                   </div>
                 ))}
@@ -750,11 +776,11 @@ export default function App() {
       </section>
 
       {/* ── Pillars ────────────────────────────────────────────────────────── */}
-      <section ref={pillarsRef} id="pillars" className="py-24 px-6 bg-[#F8F8F8]">
+      <section ref={pillarsRef} id="pillars" className="py-24 px-6 bg-[var(--cb-bg)]">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16 fade-up">
             <p className="font-mono text-[10px] tracking-[0.3em] text-[#C41E3A] uppercase mb-3">By The Numbers</p>
-            <h2 className="font-display font-black text-[#0A0A0A]" style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)' }}>
+            <h2 className="font-display font-black text-[var(--cb-text)]" style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)' }}>
               Trusted By <span className="gradient-text">Fighters</span>
             </h2>
           </div>
@@ -765,13 +791,13 @@ export default function App() {
               { stat: 98, suffix: '%', label: 'Satisfaction Rate', sub: 'Based on verified purchase reviews' },
               { stat: 50000, suffix: '+', label: 'Orders Delivered', sub: 'Since 2019, zero inventory delays' },
             ].map((item, i) => (
-              <div key={i} className="text-center p-10 rounded-3xl bg-white shadow-sm border border-[#E5E5E5] hover:shadow-md transition-shadow">
+              <div key={i} className="text-center p-10 rounded-3xl bg-[var(--cb-card)] shadow-sm border border-[var(--cb-border)] hover:shadow-md transition-shadow">
                 <div className="font-display font-black text-[#C41E3A] mb-2"
                   style={{ fontSize: 'clamp(2.8rem, 6vw, 4.5rem)', lineHeight: 1 }}>
                   <CountUp target={item.stat} suffix={item.suffix} />
                 </div>
-                <div className="font-display font-bold text-[#0A0A0A] text-lg mb-1">{item.label}</div>
-                <div className="font-mono text-[10px] tracking-[0.15em] text-gray-500 uppercase">{item.sub}</div>
+                <div className="font-display font-bold text-[var(--cb-text)] text-lg mb-1">{item.label}</div>
+                <div className="font-mono text-[10px] tracking-[0.15em] text-[var(--cb-muted-3)] uppercase">{item.sub}</div>
               </div>
             ))}
           </div>
@@ -779,11 +805,11 @@ export default function App() {
       </section>
 
       {/* ── Protocol ───────────────────────────────────────────────────────── */}
-      <section ref={protocolRef} id="protocol" className="py-24 px-6 bg-[#0A0A0A]">
+      <section ref={protocolRef} id="protocol" className="py-24 px-6 bg-[var(--cb-bg)]">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16 fade-up">
             <p className="font-mono text-[10px] tracking-[0.3em] text-[#C41E3A] uppercase mb-3">The Process</p>
-            <h2 className="font-display font-black text-white" style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)' }}>
+            <h2 className="font-display font-black text-[var(--cb-text)]" style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)' }}>
               Three Steps to <span className="gradient-text">Fight Ready</span>
             </h2>
           </div>
@@ -792,11 +818,11 @@ export default function App() {
             {PROTOCOL_STEPS.map((step, i) => (
               <div key={step.step}
                 className="protocol-card rounded-3xl overflow-hidden grid grid-cols-1 md:grid-cols-2 border"
-                style={{ background: 'rgba(20,20,20,0.9)', borderColor: 'rgba(196,30,58,0.15)' }}>
+                style={{ background: 'var(--cb-protocol-card)', borderColor: 'rgba(196,30,58,0.15)' }}>
                 <div className="p-10 flex flex-col justify-center">
                   <span className="font-mono text-[10px] tracking-[0.3em] text-[#C41E3A] uppercase mb-3">Step {step.step}</span>
-                  <h3 className="font-display text-white font-black text-3xl mb-4 leading-tight">{step.title}</h3>
-                  <p className="text-gray-400 leading-relaxed mb-6">{step.desc}</p>
+                  <h3 className="font-display text-[var(--cb-text)] font-black text-3xl mb-4 leading-tight">{step.title}</h3>
+                  <p className="text-[var(--cb-muted)] leading-relaxed mb-6">{step.desc}</p>
                   <div className="flex items-center gap-2 text-[#D4AF37] text-sm font-semibold">
                     <div className="w-8 h-px bg-[#D4AF37]" />
                     Step {i + 1} of {PROTOCOL_STEPS.length}
@@ -816,22 +842,22 @@ export default function App() {
       </section>
 
       {/* ── Services Grid ──────────────────────────────────────────────────── */}
-      <section id="services" className="py-24 px-6 bg-[#0A0A0A]">
+      <section id="services" className="py-24 px-6 bg-[var(--cb-bg)]">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16 fade-up">
             <p className="font-mono text-[10px] tracking-[0.3em] text-[#C41E3A] uppercase mb-3">Shop By Category</p>
-            <h2 className="font-display font-black text-white" style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)' }}>
+            <h2 className="font-display font-black text-[var(--cb-text)]" style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)' }}>
               Find Your <span className="gradient-text">Category</span>
             </h2>
-            <p className="mt-4 text-gray-400 max-w-xl mx-auto leading-relaxed">Every discipline. Every skill level. Gear engineered for the way you fight.</p>
+            <p className="mt-4 text-[var(--cb-muted)] max-w-xl mx-auto leading-relaxed">Every discipline. Every skill level. Gear engineered for the way you fight.</p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-white/8 rounded-2xl overflow-hidden stagger-grid-fade">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-[var(--cb-border)] rounded-2xl overflow-hidden stagger-grid-fade">
             {PRODUCTS.map((product, i) => {
               const Icon = product.icon
               return (
                 <div key={product.name}
-                  className="group relative bg-[#0A0A0A] p-8 cursor-pointer transition-all duration-300 hover:bg-[#141414]">
+                  className="group relative bg-[var(--cb-bg)] p-8 cursor-pointer transition-all duration-300 hover:bg-[var(--cb-card-hover)]">
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                     style={{ background: 'linear-gradient(135deg, rgba(196,30,58,0.06), transparent)' }} />
                   <div className="relative z-10">
@@ -840,8 +866,8 @@ export default function App() {
                       <Icon size={22} color="#C41E3A" />
                     </div>
                     <div className="font-mono text-[9px] tracking-[0.25em] text-[#D4AF37] uppercase mb-2">{product.tag}</div>
-                    <h3 className="font-display text-white font-bold text-xl mb-2 leading-tight">{product.name}</h3>
-                    <p className="text-gray-500 text-sm leading-relaxed mb-5">{product.desc}</p>
+                    <h3 className="font-display text-[var(--cb-text)] font-bold text-xl mb-2 leading-tight">{product.name}</h3>
+                    <p className="text-[var(--cb-muted-3)] text-sm leading-relaxed mb-5">{product.desc}</p>
                     <div className="flex items-center gap-2 text-[#C41E3A] text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
                       Shop <ChevronRight size={14} />
                     </div>
@@ -854,11 +880,11 @@ export default function App() {
       </section>
 
       {/* ── Trust Signals ──────────────────────────────────────────────────── */}
-      <section id="trust" className="py-24 px-6 bg-[#F8F8F8]">
+      <section id="trust" className="py-24 px-6 bg-[var(--cb-bg)]">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-14 fade-up">
             <p className="font-mono text-[10px] tracking-[0.3em] text-[#C41E3A] uppercase mb-3">Our Commitment</p>
-            <h2 className="font-display font-black text-[#0A0A0A]" style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)' }}>
+            <h2 className="font-display font-black text-[var(--cb-text)]" style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)' }}>
               Why Fighters <span className="gradient-text">Choose Us</span>
             </h2>
           </div>
@@ -867,13 +893,13 @@ export default function App() {
             {TRUST_SIGNALS.map((t, i) => {
               const Icon = t.icon
               return (
-                <div key={t.title} className="p-8 rounded-3xl bg-white border border-[#E5E5E5] hover:shadow-lg transition-shadow">
+                <div key={t.title} className="p-8 rounded-3xl bg-[var(--cb-card)] border border-[var(--cb-border)] hover:shadow-lg transition-shadow">
                   <div className="w-12 h-12 rounded-2xl mb-5 flex items-center justify-center"
                     style={{ background: 'rgba(196,30,58,0.08)', border: '1px solid rgba(196,30,58,0.15)' }}>
                     <Icon size={22} color="#C41E3A" />
                   </div>
-                  <h3 className="font-display font-bold text-[#0A0A0A] text-xl mb-3">{t.title}</h3>
-                  <p className="text-gray-500 leading-relaxed text-sm">{t.desc}</p>
+                  <h3 className="font-display font-bold text-[var(--cb-text)] text-xl mb-3">{t.title}</h3>
+                  <p className="text-[var(--cb-muted-3)] leading-relaxed text-sm">{t.desc}</p>
                 </div>
               )
             })}
@@ -886,11 +912,11 @@ export default function App() {
               '"Shipped overnight before my regional. Absolute legends." — Priya R., MMA Fighter',
               '"My whole gym orders from Combo Breaker now." — Coach D., NYC Fight Club',
             ].map((q, i) => (
-              <div key={i} className="max-w-sm p-6 rounded-2xl bg-white border border-[#E5E5E5]">
+              <div key={i} className="max-w-sm p-6 rounded-2xl bg-[var(--cb-card)] border border-[var(--cb-border)]">
                 <div className="flex gap-1 mb-3">
                   {[...Array(5)].map((_, j) => <Star key={j} size={12} fill="#D4AF37" color="#D4AF37" />)}
                 </div>
-                <p className="text-gray-600 text-sm italic leading-relaxed">{q}</p>
+                <p className="text-[var(--cb-muted-4)] text-sm italic leading-relaxed">{q}</p>
               </div>
             ))}
           </div>
@@ -898,15 +924,15 @@ export default function App() {
       </section>
 
       {/* ── Contact ────────────────────────────────────────────────────────── */}
-      <section id="contact" className="py-24 px-6 bg-[#0A0A0A]">
+      <section id="contact" className="py-24 px-6 bg-[var(--cb-bg)]">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
             <div className="fade-up">
               <p className="font-mono text-[10px] tracking-[0.3em] text-[#C41E3A] uppercase mb-3">Get In Touch</p>
-              <h2 className="font-display font-black text-white mb-5" style={{ fontSize: 'clamp(2rem, 5vw, 3.2rem)', lineHeight: 1.05 }}>
+              <h2 className="font-display font-black text-[var(--cb-text)] mb-5" style={{ fontSize: 'clamp(2rem, 5vw, 3.2rem)', lineHeight: 1.05 }}>
                 Talk to a Gear<br /><span className="gradient-text">Expert</span>
               </h2>
-              <p className="text-gray-400 leading-relaxed mb-8 max-w-md">
+              <p className="text-[var(--cb-muted)] leading-relaxed mb-8 max-w-md">
                 Not sure what gear fits your style? Training for a competition? Our team of active fighters is here to help you build the perfect kit.
               </p>
 
@@ -918,7 +944,7 @@ export default function App() {
                 ].map(item => (
                   <div key={item.label} className="flex gap-4 items-center">
                     <span className="font-mono text-[9px] tracking-[0.2em] text-[#D4AF37] uppercase w-12 shrink-0">{item.label}</span>
-                    <span className="text-gray-300 text-sm">{item.val}</span>
+                    <span className="text-[var(--cb-muted-2)] text-sm">{item.val}</span>
                   </div>
                 ))}
               </div>
@@ -926,7 +952,7 @@ export default function App() {
               <div className="mt-10 p-5 rounded-2xl"
                 style={{ background: 'rgba(196,30,58,0.08)', border: '1px solid rgba(196,30,58,0.2)' }}>
                 <p className="font-mono text-[10px] tracking-[0.2em] text-[#C41E3A] uppercase mb-1">Team Orders & Bulk</p>
-                <p className="text-gray-400 text-sm leading-relaxed">Outfitting a gym or a team? Ask about bulk pricing and custom branding on gloves, shorts, and apparel.</p>
+                <p className="text-[var(--cb-muted)] text-sm leading-relaxed">Outfitting a gym or a team? Ask about bulk pricing and custom branding on gloves, shorts, and apparel.</p>
               </div>
             </div>
 

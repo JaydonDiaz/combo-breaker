@@ -4,16 +4,59 @@
 
 :root {
   --PRIMARY_RGB: 196, 30, 58;
+
+  /* Theme tokens for content sections (default = dark).
+     Hero, nav, footer, and the ProductShuffler card stay pinned to
+     their own hardcoded dark colors regardless of theme — brand chrome,
+     not page canvas. */
+  --cb-bg: #0A0A0A;
+  --cb-card: #0F0F0F;
+  --cb-card-hover: #141414;
+  --cb-card-2: rgba(255,255,255,0.04);
+  --cb-protocol-card: rgba(20,20,20,0.9);
+  --cb-border: rgba(255,255,255,0.08);
+  --cb-border-2: rgba(255,255,255,0.1);
+  --cb-text: #FFFFFF;
+  --cb-muted: #9CA3AF;
+  --cb-muted-2: #D1D5DB;
+  --cb-muted-3: #6B7280;
+  --cb-muted-4: #8B8F98;
+  --cb-input-bg: rgba(255,255,255,0.05);
+  --cb-shadow: rgba(0,0,0,0.4);
+}
+
+html[data-theme="light"] {
+  --cb-bg: #F8F8F8;
+  --cb-card: #FFFFFF;
+  --cb-card-hover: #F1F0EE;
+  --cb-card-2: rgba(10,10,10,0.035);
+  --cb-protocol-card: #FFFFFF;
+  --cb-border: #E5E5E5;
+  --cb-border-2: #E5E5E5;
+  --cb-text: #0A0A0A;
+  --cb-muted: #6B6B6B;
+  --cb-muted-2: #4B4B4B;
+  --cb-muted-3: #6A6A6A;
+  --cb-muted-4: #56565E;
+  --cb-input-bg: rgba(10,10,10,0.035);
+  --cb-shadow: rgba(10,10,10,0.08);
 }
 
 @layer base {
   *, *::before, *::after { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
+  html { scroll-behavior: smooth; transition: background 0.3s ease; }
   body {
     margin: 0;
     font-family: 'Inter', system-ui, sans-serif;
-    background: #F8F8F8;
-    color: #0A0A0A;
+    /* Fixed, not var()-driven: /invoice, /training-plan, /privacy, and
+       /terms are separate pinned-dark routes with their own hardcoded
+       backgrounds. data-theme lives on <html> and persists across
+       client-side navigation, so anything here that read the theme
+       tokens would risk invisible text on those routes if any of their
+       elements ever fall back to inherited color. The themed home page
+       sections set their own colors explicitly via --cb-* already. */
+    background: #0A0A0A;
+    color: #FFFFFF;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
