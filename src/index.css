@@ -6,10 +6,10 @@
   --PRIMARY_RGB: 196, 30, 58;
 
   /* Theme tokens for content sections (default = dark).
-     Hero, footer, and the ProductShuffler card stay pinned to their own
-     hardcoded dark colors regardless of theme — brand chrome, not page
-     canvas. The nav pill DOES react (see --cb-nav-*) so the toggle is
-     visible no matter where you've scrolled. */
+     Hero and footer stay pinned to their own hardcoded dark colors
+     regardless of theme — brand chrome, not page canvas. The nav pill
+     DOES react (see --cb-nav-*) so the toggle is visible no matter where
+     you've scrolled. */
   --cb-bg: #0A0A0A;
   --cb-card: #0F0F0F;
   --cb-card-hover: #141414;

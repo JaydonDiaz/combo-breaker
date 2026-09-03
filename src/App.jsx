@@ -211,7 +211,7 @@ function FightStriker() {
 
 function ProductGrid() {
   return (
-    <div className="relative w-full h-full flex flex-col bg-[#0A0A0A] rounded-2xl overflow-hidden">
+    <div className="relative w-full h-full flex flex-col bg-[var(--cb-card)] rounded-2xl overflow-hidden">
       <div className="absolute inset-0 opacity-10 grid-bg" />
 
       {/* Header */}
@@ -221,7 +221,7 @@ function ProductGrid() {
           <LayoutGrid size={20} color="#C41E3A" />
         </div>
         <p className="font-mono text-[10px] tracking-[0.2em] text-[#D4AF37] uppercase mb-2">Our Categories</p>
-        <h3 className="font-display text-white font-bold text-2xl">Built for every discipline</h3>
+        <h3 className="font-display text-[var(--cb-text)] font-bold text-2xl">Built for every discipline</h3>
       </div>
 
       {/* Grid */}
@@ -233,15 +233,15 @@ function ProductGrid() {
               <Link
                 key={c.slug}
                 to={`/shop/${c.slug}`}
-                className="group rounded-xl border border-white/10 bg-[rgba(15,15,15,0.95)] shadow-[0_4px_20px_rgba(0,0,0,0.6)] flex flex-col gap-2 p-4 cursor-pointer transition-all duration-300 ease-out hover:-translate-y-1.5 hover:border-[#C41E3A]/50 hover:bg-[rgba(35,8,14,0.97)] hover:shadow-[0_20px_40px_rgba(196,30,58,0.25),0_0_0_1px_rgba(196,30,58,0.2)]"
+                className="group rounded-xl border border-[var(--cb-border)] bg-[var(--cb-card-2)] shadow-[0_4px_20px_var(--cb-shadow)] flex flex-col gap-2 p-4 cursor-pointer transition-all duration-300 ease-out hover:-translate-y-1.5 hover:border-[#C41E3A]/50 hover:bg-[var(--cb-card-hover)] hover:shadow-[0_20px_40px_rgba(196,30,58,0.25),0_0_0_1px_rgba(196,30,58,0.2)]"
               >
                 <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
                   style={{ background: 'rgba(196,30,58,0.15)' }}>
                   <Icon size={18} color="#C41E3A" />
                 </div>
                 <span className="font-mono text-[9px] tracking-[0.15em] text-[#D4AF37] uppercase leading-none">{c.tag}</span>
-                <h4 className="font-display text-white font-bold text-sm leading-tight">{c.name}</h4>
-                <p className="text-gray-400 text-xs leading-relaxed line-clamp-2">{c.desc}</p>
+                <h4 className="font-display text-[var(--cb-text)] font-bold text-sm leading-tight">{c.name}</h4>
+                <p className="text-[var(--cb-muted-3)] text-xs leading-relaxed line-clamp-2">{c.desc}</p>
                 <span className="mt-auto flex items-center gap-1 text-[#C41E3A] text-xs font-semibold opacity-0 -translate-x-1 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0">
                   Shop Now <ArrowRight size={12} />
                 </span>
