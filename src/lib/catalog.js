@@ -52,18 +52,18 @@ export const PRODUCTS_BY_CATEGORY = {
     { name: 'Hand Wrap Set', price: 14, img: 'https://images.unsplash.com/photo-1770734265410-0c686b750f0f?auto=format&fit=crop&w=1200&q=80' },
   ],
   mma: [
-    { name: 'Cage Fighter Shorts', price: 54, img: 'https://images.unsplash.com/photo-1785441309938-c7ab7e58b9ad?auto=format&fit=crop&w=1200&q=80' },
+    { name: 'Cage Fighter Shorts', price: 54, img: 'https://images.unsplash.com/photo-1590556409300-431697bafd4f?auto=format&fit=crop&w=1200&q=80' },
     { name: 'Contact Training Gloves', price: 69, img: 'https://images.unsplash.com/photo-1642267308245-6f490209f81e?auto=format&fit=crop&w=1200&q=80' },
     { name: 'Focus Mitts (Pair)', price: 59, img: 'https://images.unsplash.com/photo-1622599504752-14e0a7eba919?auto=format&fit=crop&w=1200&q=80' },
   ],
   'muay-thai': [
     { name: 'Authentic Thai Shorts', price: 49, img: 'https://images.unsplash.com/photo-1525680996651-0222228be6f0?auto=format&fit=crop&w=1200&q=80' },
-    { name: 'Fight Camp Kit', price: 129, img: 'https://images.unsplash.com/photo-1565852841746-79286ef8fa0a?auto=format&fit=crop&w=1200&q=80' },
+    { name: 'Shin Guards (Pair)', price: 59, img: 'https://images.unsplash.com/photo-1773289336969-894c3c4e0fae?auto=format&fit=crop&w=1200&q=80' },
     { name: 'Thai Pads (Pair)', price: 79, img: 'https://images.unsplash.com/photo-1711825051967-f8ba8c0845e7?auto=format&fit=crop&w=1200&q=80' },
   ],
   bjj: [
     { name: 'Competition BJJ Gi', price: 139, img: 'https://images.unsplash.com/photo-1542937307-e90d0cc07237?auto=format&fit=crop&w=1200&q=80' },
-    { name: 'No-Gi Grappling Spats', price: 59, img: 'https://images.unsplash.com/photo-1764908912174-cf465d433f0f?auto=format&fit=crop&w=1200&q=80' },
+    { name: 'No-Gi Rash Guard', price: 54, img: 'https://images.unsplash.com/photo-1538795651409-7982a3ca2f8a?auto=format&fit=crop&w=1200&q=80' },
     { name: 'Rank Belt (All Sizes)', price: 24, img: 'https://images.unsplash.com/photo-1525198104776-f6e8a873f9b7?auto=format&fit=crop&w=1200&q=80' },
   ],
   apparel: [
