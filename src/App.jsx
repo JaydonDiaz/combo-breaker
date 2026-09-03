@@ -215,13 +215,9 @@ function FightStriker() {
   )
 }
 
-// ─── ProductShuffler ──────────────────────────────────────────────────────────
+// ─── ProductGrid ──────────────────────────────────────────────────────────
 
-const FAN_ROTATIONS = [-25, -15, -5, 5, 15, 25]
-
-function ProductShuffler() {
-  const [hoveredIdx, setHoveredIdx] = useState(null)
-
+function ProductGrid() {
   return (
     <div className="relative w-full h-full flex flex-col bg-[#0A0A0A] rounded-2xl overflow-hidden">
       <div className="absolute inset-0 opacity-10 grid-bg" />
@@ -236,58 +232,31 @@ function ProductShuffler() {
         <h3 className="font-display text-white font-bold text-2xl">Built for every discipline</h3>
       </div>
 
-      {/* Fan */}
-      <div className="relative flex-1 flex items-center justify-center pb-4">
-        <div className="relative" style={{ width: '280px', height: '290px' }}>
-          {PRODUCTS.map((p, i) => {
-            const isHovered = hoveredIdx === i
+      {/* Grid */}
+      <div className="relative z-10 flex-1 p-6 pt-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 h-full">
+          {PRODUCTS.map(p => {
             const Icon = p.icon
-            const rotation = FAN_ROTATIONS[i]
-
             return (
               <div
                 key={p.name}
-                onMouseEnter={() => setHoveredIdx(i)}
-                onMouseLeave={() => setHoveredIdx(null)}
-                className="absolute cursor-pointer rounded-xl border flex flex-col gap-3 p-5 transition-all duration-300 ease-out"
-                style={{
-                  width: '180px',
-                  height: '280px',
-                  left: '50%',
-                  bottom: '0',
-                  marginLeft: '-90px',
-                  transformOrigin: 'bottom center',
-                  transform: isHovered
-                    ? `rotate(${rotation}deg) translateY(-40px) scale(1.05)`
-                    : `rotate(${rotation}deg)`,
-                  zIndex: isHovered ? 20 : i + 1,
-                  background: isHovered ? 'rgba(35,8,14,0.97)' : 'rgba(15,15,15,0.95)',
-                  borderColor: isHovered ? 'rgba(196,30,58,0.5)' : 'rgba(255,255,255,0.1)',
-                  boxShadow: isHovered
-                    ? '0 20px 40px rgba(196,30,58,0.25), 0 0 0 1px rgba(196,30,58,0.2)'
-                    : '0 4px 20px rgba(0,0,0,0.6)',
-                }}
+                className="group rounded-xl border border-white/10 bg-[rgba(15,15,15,0.95)] shadow-[0_4px_20px_rgba(0,0,0,0.6)] flex flex-col gap-2 p-4 cursor-pointer transition-all duration-300 ease-out hover:-translate-y-1.5 hover:border-[#C41E3A]/50 hover:bg-[rgba(35,8,14,0.97)] hover:shadow-[0_20px_40px_rgba(196,30,58,0.25),0_0_0_1px_rgba(196,30,58,0.2)]"
               >
-                <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0"
+                <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
                   style={{ background: 'rgba(196,30,58,0.15)' }}>
-                  <Icon size={20} color="#C41E3A" />
+                  <Icon size={18} color="#C41E3A" />
                 </div>
                 <span className="font-mono text-[9px] tracking-[0.15em] text-[#D4AF37] uppercase leading-none">{p.tag}</span>
-                <h3 className="font-display text-white font-bold text-base leading-tight">{p.name}</h3>
-                <p className="text-gray-400 text-xs leading-relaxed line-clamp-4">{p.desc}</p>
-                {isHovered && (
-                  <button className="mt-auto flex items-center gap-1 text-[#C41E3A] text-xs font-semibold hover:text-[#D4AF37] transition-colors">
-                    Shop Now <ArrowRight size={12} />
-                  </button>
-                )}
+                <h4 className="font-display text-white font-bold text-sm leading-tight">{p.name}</h4>
+                <p className="text-gray-400 text-xs leading-relaxed line-clamp-2">{p.desc}</p>
+                <span className="mt-auto flex items-center gap-1 text-[#C41E3A] text-xs font-semibold opacity-0 -translate-x-1 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0">
+                  Shop Now <ArrowRight size={12} />
+                </span>
               </div>
             )
           })}
         </div>
       </div>
-
-      {/* Hint */}
-      <p className="relative z-10 pb-4 text-center font-mono text-[9px] tracking-[0.2em] text-gray-600 uppercase">Hover to explore</p>
     </div>
   )
 }
@@ -734,9 +703,9 @@ export default function App() {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 items-start">
-            {/* Card 1 — Product Shuffler */}
-            <div className="fade-up lg:col-span-2 rounded-2xl overflow-hidden" style={{ height: '480px' }}>
-              <ProductShuffler />
+            {/* Card 1 — Product Grid */}
+            <div className="fade-up lg:col-span-2 rounded-2xl overflow-hidden" style={{ minHeight: '480px' }}>
+              <ProductGrid />
             </div>
 
             {/* Card 2 — Free shipping calculator */}
