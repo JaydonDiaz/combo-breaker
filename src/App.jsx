@@ -3,11 +3,12 @@ import { Link } from 'react-router-dom'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import {
-  Target, Zap, Flame, Shield, Trophy, Package,
+  Zap,
   ChevronRight, Menu, X, Upload, CheckCircle,
   Star, Award, Truck, RotateCcw, HeadphonesIcon,
   ArrowRight, Play, LayoutGrid, Sun, Moon
 } from 'lucide-react'
+import { CATEGORIES } from './lib/catalog.js'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -27,15 +28,6 @@ const HERO_IMAGES = [
   'https://images.unsplash.com/photo-1552072092-7f9b8d63efcb?auto=format&fit=crop&w=2400&q=80',
   'https://images.unsplash.com/photo-1708134028754-5ba43093fedf?auto=format&fit=crop&w=2400&q=80',
   'https://images.unsplash.com/photo-1688141401462-d2ef7c292b0e?auto=format&fit=crop&w=2400&q=80',
-]
-
-const PRODUCTS = [
-  { icon: Target, name: 'Boxing Arsenal', desc: 'Gloves, wraps, headgear & bags engineered for the sweet science', tag: 'BOXING' },
-  { icon: Zap, name: 'MMA Combat Gear', desc: 'Shorts, rash guards, shin guards & submission gloves built cage-ready', tag: 'MMA' },
-  { icon: Flame, name: 'Muay Thai Collection', desc: 'Authentic Thai shorts, shin pads, and clinch-grade heavy bags', tag: 'MUAY THAI' },
-  { icon: Shield, name: 'BJJ & Grappling', desc: 'Premium gi, no-gi sets, spats, and mat-tested knee guards', tag: 'BJJ' },
-  { icon: Trophy, name: 'Fight Apparel', desc: 'Compression wear, hoodies, and fight-day fit that performs at every level', tag: 'APPAREL' },
-  { icon: Package, name: 'Training Essentials', desc: 'Jump ropes, resistance bands, mouth guards & recovery tools', tag: 'TRAINING' },
 ]
 
 const PROTOCOL_STEPS = [
@@ -235,24 +227,25 @@ function ProductGrid() {
       {/* Grid */}
       <div className="relative z-10 flex-1 p-6 pt-4">
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 h-full">
-          {PRODUCTS.map(p => {
-            const Icon = p.icon
+          {CATEGORIES.map(c => {
+            const Icon = c.icon
             return (
-              <div
-                key={p.name}
+              <Link
+                key={c.slug}
+                to={`/shop/${c.slug}`}
                 className="group rounded-xl border border-white/10 bg-[rgba(15,15,15,0.95)] shadow-[0_4px_20px_rgba(0,0,0,0.6)] flex flex-col gap-2 p-4 cursor-pointer transition-all duration-300 ease-out hover:-translate-y-1.5 hover:border-[#C41E3A]/50 hover:bg-[rgba(35,8,14,0.97)] hover:shadow-[0_20px_40px_rgba(196,30,58,0.25),0_0_0_1px_rgba(196,30,58,0.2)]"
               >
                 <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
                   style={{ background: 'rgba(196,30,58,0.15)' }}>
                   <Icon size={18} color="#C41E3A" />
                 </div>
-                <span className="font-mono text-[9px] tracking-[0.15em] text-[#D4AF37] uppercase leading-none">{p.tag}</span>
-                <h4 className="font-display text-white font-bold text-sm leading-tight">{p.name}</h4>
-                <p className="text-gray-400 text-xs leading-relaxed line-clamp-2">{p.desc}</p>
+                <span className="font-mono text-[9px] tracking-[0.15em] text-[#D4AF37] uppercase leading-none">{c.tag}</span>
+                <h4 className="font-display text-white font-bold text-sm leading-tight">{c.name}</h4>
+                <p className="text-gray-400 text-xs leading-relaxed line-clamp-2">{c.desc}</p>
                 <span className="mt-auto flex items-center gap-1 text-[#C41E3A] text-xs font-semibold opacity-0 -translate-x-1 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0">
                   Shop Now <ArrowRight size={12} />
                 </span>
-              </div>
+              </Link>
             )
           })}
         </div>
@@ -702,14 +695,14 @@ export default function App() {
             <p className="mt-4 text-[var(--cb-muted)] max-w-xl mx-auto leading-relaxed">Every product designed with active fighters. Every material tested in training. Zero compromises.</p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 items-stretch">
             {/* Card 1 — Product Grid */}
             <div className="fade-up lg:col-span-2 rounded-2xl overflow-hidden" style={{ minHeight: '480px' }}>
               <ProductGrid />
             </div>
 
             {/* Card 2 — Free shipping calculator */}
-            <div className="fade-up rounded-2xl bg-[var(--cb-card)] border border-[var(--cb-border)] p-7 flex flex-col justify-between" style={{ minHeight: '340px' }}>
+            <div className="fade-up rounded-2xl bg-[var(--cb-card)] border border-[var(--cb-border)] p-7 flex flex-col justify-between">
               <div>
                 <div className="w-10 h-10 rounded-xl mb-4 flex items-center justify-center"
                   style={{ background: 'rgba(212,175,55,0.15)' }}>
@@ -822,10 +815,10 @@ export default function App() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-[var(--cb-border)] rounded-2xl overflow-hidden stagger-grid-fade">
-            {PRODUCTS.map((product, i) => {
-              const Icon = product.icon
+            {CATEGORIES.map(category => {
+              const Icon = category.icon
               return (
-                <div key={product.name}
+                <Link key={category.slug} to={`/shop/${category.slug}`}
                   className="group relative bg-[var(--cb-bg)] p-8 cursor-pointer transition-all duration-300 hover:bg-[var(--cb-card-hover)]">
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                     style={{ background: 'linear-gradient(135deg, rgba(196,30,58,0.06), transparent)' }} />
@@ -834,14 +827,14 @@ export default function App() {
                       style={{ background: 'rgba(196,30,58,0.12)', border: '1px solid rgba(196,30,58,0.2)' }}>
                       <Icon size={22} color="#C41E3A" />
                     </div>
-                    <div className="font-mono text-[9px] tracking-[0.25em] text-[#D4AF37] uppercase mb-2">{product.tag}</div>
-                    <h3 className="font-display text-[var(--cb-text)] font-bold text-xl mb-2 leading-tight">{product.name}</h3>
-                    <p className="text-[var(--cb-muted-3)] text-sm leading-relaxed mb-5">{product.desc}</p>
+                    <div className="font-mono text-[9px] tracking-[0.25em] text-[#D4AF37] uppercase mb-2">{category.tag}</div>
+                    <h3 className="font-display text-[var(--cb-text)] font-bold text-xl mb-2 leading-tight">{category.name}</h3>
+                    <p className="text-[var(--cb-muted-3)] text-sm leading-relaxed mb-5">{category.desc}</p>
                     <div className="flex items-center gap-2 text-[#C41E3A] text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
                       Shop <ChevronRight size={14} />
                     </div>
                   </div>
-                </div>
+                </Link>
               )
             })}
           </div>
@@ -958,10 +951,10 @@ export default function App() {
             <div>
               <h4 className="font-mono text-[10px] tracking-[0.2em] text-gray-500 uppercase mb-4">Shop</h4>
               <ul className="space-y-2.5">
-                {PRODUCTS.map(p => (
-                  <li key={p.name}>
-                    <button onClick={() => document.querySelector('#services')?.scrollIntoView({ behavior: 'smooth' })}
-                      className="text-gray-400 text-sm hover:text-white transition-colors">{p.name}</button>
+                {CATEGORIES.map(c => (
+                  <li key={c.slug}>
+                    <Link to={`/shop/${c.slug}`}
+                      className="text-gray-400 text-sm hover:text-white transition-colors">{c.name}</Link>
                   </li>
                 ))}
               </ul>
