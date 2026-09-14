@@ -703,10 +703,6 @@ export default function App() {
             {/* Card 2 — Free shipping calculator */}
             <div className="fade-up rounded-2xl bg-[var(--cb-card)] border border-[var(--cb-border)] p-7 flex flex-col justify-between">
               <div>
-                <div className="w-10 h-10 rounded-xl mb-4 flex items-center justify-center"
-                  style={{ background: 'rgba(212,175,55,0.15)' }}>
-                  <Truck size={20} color="#D4AF37" />
-                </div>
                 <p className="font-mono text-[10px] tracking-[0.2em] text-[#D4AF37] uppercase mb-2">Free Shipping</p>
                 <h3 className="font-display text-[var(--cb-text)] font-bold text-2xl mb-3">Zero friction to your door</h3>
                 <p className="text-[var(--cb-muted)] text-sm leading-relaxed">Every order over $75 ships free. Under $75? Flat $7.99. Track your gear from warehouse to gym.</p>
@@ -815,18 +811,12 @@ export default function App() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-[var(--cb-border)] rounded-2xl overflow-hidden stagger-grid-fade">
             {CATEGORIES.map(category => {
-              const Icon = category.icon
               return (
                 <Link key={category.slug} to={`/shop/${category.slug}`}
                   className="group relative bg-[var(--cb-bg)] p-8 cursor-pointer transition-all duration-300 hover:bg-[var(--cb-card-hover)]">
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                     style={{ background: 'linear-gradient(135deg, rgba(196,30,58,0.06), transparent)' }} />
                   <div className="relative z-10">
-                    <div className="w-12 h-12 rounded-xl mb-5 flex items-center justify-center transition-all duration-300 group-hover:scale-110"
-                      style={{ background: 'rgba(196,30,58,0.12)', border: '1px solid rgba(196,30,58,0.2)' }}>
-                      <Icon size={22} color="#C41E3A" />
-                    </div>
-                    <div className="font-mono text-[9px] tracking-[0.25em] text-[#D4AF37] uppercase mb-2">{category.tag}</div>
                     <h3 className="font-display text-[var(--cb-text)] font-bold text-xl mb-2 leading-tight">{category.name}</h3>
                     <p className="text-[var(--cb-muted-3)] text-sm leading-relaxed mb-5">{category.desc}</p>
                     <div className="flex items-center gap-2 text-[#C41E3A] text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
