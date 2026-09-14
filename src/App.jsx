@@ -842,13 +842,8 @@ export default function App() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 stagger-grid">
             {TRUST_SIGNALS.map((t, i) => {
-              const Icon = t.icon
               return (
                 <div key={t.title} className="p-8 rounded-3xl bg-[var(--cb-card)] border border-[var(--cb-border)] hover:shadow-lg transition-shadow">
-                  <div className="w-12 h-12 rounded-2xl mb-5 flex items-center justify-center"
-                    style={{ background: 'rgba(196,30,58,0.08)', border: '1px solid rgba(196,30,58,0.15)' }}>
-                    <Icon size={22} color="#C41E3A" />
-                  </div>
                   <h3 className="font-display font-bold text-[var(--cb-text)] text-xl mb-3">{t.title}</h3>
                   <p className="text-[var(--cb-muted-3)] leading-relaxed text-sm">{t.desc}</p>
                 </div>
