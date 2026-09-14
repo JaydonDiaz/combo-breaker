@@ -235,9 +235,8 @@ function ProductGrid() {
                 to={`/shop/${c.slug}`}
                 className="group rounded-xl border border-[var(--cb-border)] bg-[var(--cb-card-2)] shadow-[0_4px_20px_var(--cb-shadow)] flex flex-col gap-2 p-4 cursor-pointer transition-all duration-300 ease-out hover:-translate-y-1.5 hover:border-[#C41E3A]/50 hover:bg-[var(--cb-card-hover)] hover:shadow-[0_20px_40px_rgba(196,30,58,0.25),0_0_0_1px_rgba(196,30,58,0.2)]"
               >
-                <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
-                  style={{ background: 'rgba(196,30,58,0.15)' }}>
-                  <Icon size={18} color="#C41E3A" />
+                <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 mx-auto bg-[rgba(196,30,58,0.15)] text-[#C41E3A] transition-all duration-300 ease-out group-hover:bg-[#C41E3A] group-hover:text-white group-hover:scale-110 group-hover:-rotate-6">
+                  <Icon size={18} />
                 </div>
                 <span className="font-mono text-[9px] tracking-[0.15em] text-[#D4AF37] uppercase leading-none">{c.tag}</span>
                 <h4 className="font-display text-[var(--cb-text)] font-bold text-sm leading-tight">{c.name}</h4>
