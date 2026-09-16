@@ -547,7 +547,7 @@ export default function App() {
 
       {/* ── Navbar ─────────────────────────────────────────────────────────── */}
       <header className="fixed top-0 left-0 right-0 z-50 flex justify-center px-4 pt-4">
-        <nav className="w-full max-w-6xl px-6 py-3 rounded-2xl flex items-center justify-between transition-all duration-500"
+        <nav className="w-full max-w-[1440px] px-6 py-3 rounded-2xl flex items-center justify-between transition-all duration-500"
           style={{
             background: scrolled ? 'rgba(var(--cb-nav-bg-rgb), 0.85)' : 'rgba(var(--cb-nav-bg-rgb), 0.18)',
             backdropFilter: 'blur(16px)',
@@ -685,7 +685,7 @@ export default function App() {
 
       {/* ── Features ───────────────────────────────────────────────────────── */}
       <section id="features" className="py-24 px-6 bg-[var(--cb-bg)]">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-[1440px] mx-auto">
           <div className="text-center mb-16 fade-up">
             <p className="font-mono text-[10px] tracking-[0.3em] text-[#C41E3A] uppercase mb-3">What We Offer</p>
             <h2 className="font-display font-black text-[var(--cb-text)]" style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)' }}>
@@ -734,7 +734,7 @@ export default function App() {
 
       {/* ── Pillars ────────────────────────────────────────────────────────── */}
       <section ref={pillarsRef} id="pillars" className="py-24 px-6 bg-[var(--cb-bg)]">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-[1440px] mx-auto">
           <div className="text-center mb-16 fade-up">
             <p className="font-mono text-[10px] tracking-[0.3em] text-[#C41E3A] uppercase mb-3">By The Numbers</p>
             <h2 className="font-display font-black text-[var(--cb-text)]" style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)' }}>
@@ -763,7 +763,7 @@ export default function App() {
 
       {/* ── Protocol ───────────────────────────────────────────────────────── */}
       <section ref={protocolRef} id="protocol" className="py-24 px-6 bg-[var(--cb-bg)]">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-[1440px] mx-auto">
           <div className="text-center mb-16 fade-up">
             <p className="font-mono text-[10px] tracking-[0.3em] text-[#C41E3A] uppercase mb-3">The Process</p>
             <h2 className="font-display font-black text-[var(--cb-text)]" style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)' }}>
@@ -800,7 +800,7 @@ export default function App() {
 
       {/* ── Services Grid ──────────────────────────────────────────────────── */}
       <section id="services" className="py-24 px-6 bg-[var(--cb-bg)]">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-[1440px] mx-auto">
           <div className="text-center mb-16 fade-up">
             <p className="font-mono text-[10px] tracking-[0.3em] text-[#C41E3A] uppercase mb-3">Shop By Category</p>
             <h2 className="font-display font-black text-[var(--cb-text)]" style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)' }}>
@@ -832,7 +832,7 @@ export default function App() {
 
       {/* ── Trust Signals ──────────────────────────────────────────────────── */}
       <section id="trust" className="py-24 px-6 bg-[var(--cb-bg)]">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-[1440px] mx-auto">
           <div className="text-center mb-14 fade-up">
             <p className="font-mono text-[10px] tracking-[0.3em] text-[#C41E3A] uppercase mb-3">Our Commitment</p>
             <h2 className="font-display font-black text-[var(--cb-text)]" style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)' }}>
@@ -871,7 +871,7 @@ export default function App() {
 
       {/* ── Contact ────────────────────────────────────────────────────────── */}
       <section id="contact" className="py-24 px-6 bg-[var(--cb-bg)]">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-[1440px] mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
             <div className="fade-up">
               <p className="font-mono text-[10px] tracking-[0.3em] text-[#C41E3A] uppercase mb-3">Get In Touch</p>
@@ -911,7 +911,7 @@ export default function App() {
 
       {/* ── Footer ─────────────────────────────────────────────────────────── */}
       <footer className="bg-[#050505] border-t border-white/5 px-6 py-16">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-[1440px] mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
             {/* Brand */}
             <div className="md:col-span-2">

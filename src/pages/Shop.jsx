@@ -16,7 +16,7 @@ export default function Shop() {
     <div className="min-h-screen bg-[#0A0A0A] text-white font-body">
       {/* Header */}
       <div className="border-b border-white/10 px-6 py-6">
-        <div className="max-w-6xl mx-auto flex items-center justify-between gap-4">
+        <div className="max-w-[1440px] mx-auto flex items-center justify-between gap-4">
           <Link to="/" className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg flex items-center justify-center"
               style={{ background: 'linear-gradient(135deg, #C41E3A, #9B1726)' }}>
@@ -32,7 +32,7 @@ export default function Shop() {
 
       {/* Category switcher */}
       <div className="px-6 pt-8">
-        <div className="max-w-6xl mx-auto flex flex-wrap gap-2">
+        <div className="max-w-[1440px] mx-auto flex flex-wrap gap-2">
           {CATEGORIES.map(c => (
             <Link
               key={c.slug}
@@ -50,7 +50,7 @@ export default function Shop() {
 
       {/* Category hero */}
       <div className="px-6 pt-10 pb-6">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-[1440px] mx-auto">
           <div className="w-12 h-12 rounded-xl mb-5 flex items-center justify-center"
             style={{ background: 'rgba(196,30,58,0.12)', border: '1px solid rgba(196,30,58,0.2)' }}>
             <Icon size={22} color="#C41E3A" />
@@ -63,7 +63,7 @@ export default function Shop() {
 
       {/* Products */}
       <div className="px-6 pb-24">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="max-w-[1440px] mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {products.map(product => (
             <div key={product.name}
               className="group rounded-2xl overflow-hidden border border-white/10 bg-[#0F0F0F] transition-all duration-300 ease-out hover:-translate-y-1.5 hover:border-[#C41E3A]/50 hover:shadow-[0_20px_40px_rgba(196,30,58,0.2)]">
