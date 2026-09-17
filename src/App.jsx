@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import {
@@ -18,7 +18,7 @@ const NAV_LINKS = [
   { label: 'Gear', href: '#features' },
   { label: 'Why Us', href: '#pillars' },
   { label: 'How It Works', href: '#protocol' },
-  { label: 'Shop', href: '#services' },
+  { label: 'Shop', to: '/shop' },
   { label: 'Contact', href: '#contact' },
 ]
 
@@ -388,6 +388,7 @@ function ContactForm() {
 // ─── Main App ─────────────────────────────────────────────────────────────────
 
 export default function App() {
+  const navigate = useNavigate()
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [activeImg, setActiveImg] = useState(0)
@@ -565,7 +566,7 @@ export default function App() {
           {/* Desktop links */}
           <div className="hidden md:flex items-center gap-1">
             {NAV_LINKS.map(l => (
-              <button key={l.label} onClick={() => scrollTo(l.href)}
+              <button key={l.label} onClick={() => l.to ? navigate(l.to) : scrollTo(l.href)}
                 className={`px-4 py-2 text-sm font-medium rounded-xl hover:bg-[var(--cb-card-2)] transition-all ${scrolled ? 'text-[var(--cb-muted-2)] hover:text-[var(--cb-text)]' : 'text-gray-300 hover:text-white'}`}>
                 {l.label}
               </button>
@@ -597,7 +598,7 @@ export default function App() {
           style={{ background: 'rgba(10,10,10,0.97)', backdropFilter: 'blur(20px)' }}>
           <div className="flex flex-col gap-2">
             {NAV_LINKS.map(l => (
-              <button key={l.label} onClick={() => scrollTo(l.href)}
+              <button key={l.label} onClick={() => { setMenuOpen(false); l.to ? navigate(l.to) : scrollTo(l.href) }}
                 className="text-left py-4 px-4 rounded-xl text-white font-display font-semibold text-2xl hover:bg-white/5 transition-colors border-b border-white/5">
                 {l.label}
               </button>

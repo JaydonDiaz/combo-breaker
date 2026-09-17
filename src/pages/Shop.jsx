@@ -1,5 +1,5 @@
-import { Link, useParams } from 'react-router-dom'
-import { ArrowRight, Zap } from 'lucide-react'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import { ArrowRight, Zap, LayoutGrid } from 'lucide-react'
 import { CATEGORIES, PRODUCTS_BY_CATEGORY } from '../lib/catalog.js'
 
 function formatPrice(n) {
@@ -8,9 +8,14 @@ function formatPrice(n) {
 
 export default function Shop() {
   const { discipline } = useParams()
-  const category = CATEGORIES.find(c => c.slug === discipline) || CATEGORIES[0]
-  const products = PRODUCTS_BY_CATEGORY[category.slug] || []
-  const Icon = category.icon
+  const navigate = useNavigate()
+  const category = discipline ? CATEGORIES.find(c => c.slug === discipline) : null
+
+  const products = category
+    ? (PRODUCTS_BY_CATEGORY[category.slug] || []).map(p => ({ ...p, tag: category.tag }))
+    : CATEGORIES.flatMap(c => (PRODUCTS_BY_CATEGORY[c.slug] || []).map(p => ({ ...p, tag: c.tag })))
+
+  const Icon = category ? category.icon : LayoutGrid
 
   return (
     <div className="min-h-screen bg-[#0A0A0A] text-white font-body">
@@ -30,21 +35,23 @@ export default function Shop() {
         </div>
       </div>
 
-      {/* Category switcher */}
+      {/* Category filter */}
       <div className="px-6 pt-8">
-        <div className="max-w-[1440px] mx-auto flex flex-wrap gap-2">
-          {CATEGORIES.map(c => (
-            <Link
-              key={c.slug}
-              to={`/shop/${c.slug}`}
-              className="px-3 py-1.5 rounded-full text-xs font-mono tracking-wider uppercase transition-colors"
-              style={c.slug === category.slug
-                ? { background: 'rgba(196,30,58,0.15)', color: '#C41E3A', border: '1px solid rgba(196,30,58,0.4)' }
-                : { background: 'rgba(255,255,255,0.05)', color: '#9CA3AF', border: '1px solid rgba(255,255,255,0.1)' }}
-            >
-              {c.tag}
-            </Link>
-          ))}
+        <div className="max-w-[1440px] mx-auto">
+          <label htmlFor="category-filter" className="block font-mono text-[10px] tracking-[0.2em] text-[#D4AF37] uppercase mb-2">
+            Filter by Category
+          </label>
+          <select
+            id="category-filter"
+            value={category ? category.slug : ''}
+            onChange={(e) => navigate(e.target.value ? `/shop/${e.target.value}` : '/shop')}
+            className="w-full sm:w-72 rounded-xl px-4 py-3 text-sm font-medium bg-[#0F0F0F] border border-white/15 text-white focus:outline-none focus:border-[#C41E3A] transition-colors"
+          >
+            <option value="">All Categories</option>
+            {CATEGORIES.map(c => (
+              <option key={c.slug} value={c.slug}>{c.name}</option>
+            ))}
+          </select>
         </div>
       </div>
 
@@ -55,9 +62,15 @@ export default function Shop() {
             style={{ background: 'rgba(196,30,58,0.12)', border: '1px solid rgba(196,30,58,0.2)' }}>
             <Icon size={22} color="#C41E3A" />
           </div>
-          <p className="font-mono text-[10px] tracking-[0.3em] text-[#D4AF37] uppercase mb-3">{category.tag}</p>
-          <h1 className="font-display font-black" style={{ fontSize: 'clamp(2rem, 5vw, 3.2rem)' }}>{category.name}</h1>
-          <p className="mt-4 text-gray-400 max-w-xl leading-relaxed">{category.desc}</p>
+          <p className="font-mono text-[10px] tracking-[0.3em] text-[#D4AF37] uppercase mb-3">
+            {category ? category.tag : 'All Gear'}
+          </p>
+          <h1 className="font-display font-black" style={{ fontSize: 'clamp(2rem, 5vw, 3.2rem)' }}>
+            {category ? category.name : 'Every Discipline. One Shop.'}
+          </h1>
+          <p className="mt-4 text-gray-400 max-w-xl leading-relaxed">
+            {category ? category.desc : 'Browse the full Combo Breaker catalog, or narrow it down with the filter above.'}
+          </p>
         </div>
       </div>
 
@@ -72,7 +85,7 @@ export default function Shop() {
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
               </div>
               <div className="p-5">
-                <p className="font-mono text-[9px] tracking-[0.2em] text-[#D4AF37] uppercase mb-2">{category.tag}</p>
+                <p className="font-mono text-[9px] tracking-[0.2em] text-[#D4AF37] uppercase mb-2">{product.tag}</p>
                 <h3 className="font-display font-bold text-lg mb-2">{product.name}</h3>
                 <div className="flex items-center justify-between mt-4">
                   <span className="font-mono text-white font-semibold">{formatPrice(product.price)}</span>
