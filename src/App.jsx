@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useLayoutEffect, useRef, useCallback } from 'react'
+import { flushSync } from 'react-dom'
 import { Link, useNavigate } from 'react-router-dom'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -398,7 +399,7 @@ export default function App() {
     return window.matchMedia?.('(prefers-color-scheme: light)').matches ? 'light' : 'dark'
   })
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (theme === 'light') {
       document.documentElement.setAttribute('data-theme', 'light')
     } else {
@@ -407,7 +408,15 @@ export default function App() {
     localStorage.setItem('combo-breaker-theme', theme)
   }, [theme])
 
-  const toggleTheme = () => setTheme(t => (t === 'light' ? 'dark' : 'light'))
+  const toggleTheme = () => {
+    const next = theme === 'light' ? 'dark' : 'light'
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (!reduceMotion && document.startViewTransition) {
+      document.startViewTransition(() => flushSync(() => setTheme(next)))
+    } else {
+      setTheme(next)
+    }
+  }
   const heroRef = useRef(null)
   const heroContentRef = useRef(null)
   const pillarsRef = useRef(null)
