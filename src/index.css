@@ -6,11 +6,14 @@
   --PRIMARY_RGB: 196, 30, 58;
 
   /* Theme tokens for content sections (default = dark).
-     Hero and footer stay pinned to their own hardcoded dark colors
-     regardless of theme — brand chrome, not page canvas. The nav pill
-     DOES react (see --cb-nav-*) so the toggle is visible no matter where
-     you've scrolled. */
+     Hero and footer stay dark-with-white-text regardless of theme — brand
+     chrome, not page canvas — but their tone (--cb-chrome-rgb) still
+     shifts a step lighter in light mode via the block below, since a
+     fully pinned #0A0A0A left those bands pixel-identical to dark mode
+     regardless of the toggle. The nav pill DOES fully react (see
+     --cb-nav-*) so the toggle is visible no matter where you've scrolled. */
   --cb-bg: #0A0A0A;
+  --cb-chrome-rgb: 10,10,10;
   --cb-card: #0F0F0F;
   --cb-card-hover: #141414;
   --cb-card-2: rgba(255,255,255,0.04);
@@ -30,6 +33,7 @@
 
 html[data-theme="light"] {
   --cb-bg: #F8F8F8;
+  --cb-chrome-rgb: 42,20,22;
   --cb-card: #FFFFFF;
   --cb-card-hover: #F1F0EE;
   --cb-card-2: rgba(10,10,10,0.035);

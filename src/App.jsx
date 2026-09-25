@@ -595,7 +595,7 @@ export default function App() {
       {/* Mobile menu overlay */}
       {menuOpen && (
         <div className="fixed inset-0 z-40 flex flex-col pt-24 px-6 pb-8"
-          style={{ background: 'rgba(10,10,10,0.97)', backdropFilter: 'blur(20px)' }}>
+          style={{ background: 'rgba(var(--cb-chrome-rgb),0.97)', backdropFilter: 'blur(20px)' }}>
           <div className="flex flex-col gap-2">
             {NAV_LINKS.map(l => (
               <button key={l.label} onClick={() => { setMenuOpen(false); l.to ? navigate(l.to) : scrollTo(l.href) }}
@@ -635,7 +635,7 @@ export default function App() {
 
         {/* Dark overlay */}
         <div className="absolute inset-0 z-[1]"
-          style={{ background: 'linear-gradient(to bottom, rgba(10,10,10,0.65) 0%, rgba(10,10,10,0.4) 50%, rgba(10,10,10,0.8) 100%)' }} />
+          style={{ background: 'linear-gradient(to bottom, rgba(var(--cb-chrome-rgb),0.65) 0%, rgba(var(--cb-chrome-rgb),0.4) 50%, rgba(var(--cb-chrome-rgb),0.8) 100%)' }} />
 
         {/* Red vignette accent */}
         <div className="absolute bottom-0 left-0 right-0 h-1/3 z-[1]"
@@ -911,7 +911,7 @@ export default function App() {
       </section>
 
       {/* ── Footer ─────────────────────────────────────────────────────────── */}
-      <footer className="bg-[#050505] border-t border-white/5 px-6 py-16">
+      <footer className="border-t border-white/5 px-6 py-16" style={{ background: 'rgb(var(--cb-chrome-rgb))' }}>
         <div className="max-w-[1440px] mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
             {/* Brand */}
