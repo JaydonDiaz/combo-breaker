@@ -1,5 +1,4 @@
-import { useState, useEffect, useLayoutEffect, useRef, useCallback } from 'react'
-import { flushSync } from 'react-dom'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -10,6 +9,7 @@ import {
   ArrowRight, Play, LayoutGrid, Sun, Moon
 } from 'lucide-react'
 import { CATEGORIES } from './lib/catalog.js'
+import { useTheme } from './hooks/useTheme.js'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -393,30 +393,7 @@ export default function App() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [activeImg, setActiveImg] = useState(0)
-  const [theme, setTheme] = useState(() => {
-    const stored = localStorage.getItem('combo-breaker-theme')
-    if (stored === 'light' || stored === 'dark') return stored
-    return window.matchMedia?.('(prefers-color-scheme: light)').matches ? 'light' : 'dark'
-  })
-
-  useLayoutEffect(() => {
-    if (theme === 'light') {
-      document.documentElement.setAttribute('data-theme', 'light')
-    } else {
-      document.documentElement.removeAttribute('data-theme')
-    }
-    localStorage.setItem('combo-breaker-theme', theme)
-  }, [theme])
-
-  const toggleTheme = () => {
-    const next = theme === 'light' ? 'dark' : 'light'
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (!reduceMotion && document.startViewTransition) {
-      document.startViewTransition(() => flushSync(() => setTheme(next)))
-    } else {
-      setTheme(next)
-    }
-  }
+  const [theme, toggleTheme] = useTheme()
   const heroRef = useRef(null)
   const heroContentRef = useRef(null)
   const pillarsRef = useRef(null)
